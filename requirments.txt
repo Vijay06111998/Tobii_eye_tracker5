@@ -1,0 +1,33 @@
+### Driver Monitoring System
+
+## Project Overview
+This project implements a **Driver Monitoring System** that collects and analyzes real-time data on eye movements using a **Tobii Eye Tracker 5**. The system aims to enhance driver safety and ergonomics by detecting signs of fatigue, distraction, or improper attention during long vehicle journeys.
+
+### Key Features
+- Real-time eye movement tracking using the Tobii Eye Tracker 5.
+- Data storage in CSV format for further analysis.
+- Data visualization for eye tracking analysis.
+- Focused on low power consumption for continuous operation during long vehicle journeys.
+
+## Project Structure
+driver_monitoring_system/ │ ├── data/ │ └── collected_eye_data.csv # CSV file to store eye movement data. │ ├── utils/ │ ├── eye_tracker.py # Module to handle eye tracking data collection. │ ├── data_storage.py # Module to handle storing data into a CSV. │ └── data_analysis.py # Module for analyzing the stored data. │ ├── main.py # Entry point to run the entire system. │ └── requirements.txt # Required libraries.
+
+
+## Requirements
+### Hardware
+- Tobii Eye Tracker 5
+- Computer with USB port(for connecting the eye tracker)
+
+### Software
+- Python 3.10
+- Required Python libraries** (see `requirements.txt`)
+
+### Python Libraries
+The `requirements.txt` includes the necessary libraries for the project:
+
+
+##Installing the Required Libraries
+To install the required libraries, navigate to the project directory and run:
+```bash
+pip install -r requirements.txt
+
