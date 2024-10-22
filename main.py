@@ -2,6 +2,8 @@ from utils.eye_tracker import EyeTracker
 from utils.data_storage import DataStorage
 from utils.data_analysis import DataAnalysis
 import pandas as pd
+import threading 
+ 
 
 def main():
     # Create instances of the classes
@@ -36,6 +38,9 @@ def main():
 
     # Save the collected data to a CSV file
     storage.save_data(collected_data, columns)
+    
+     # Visualize the collected data
+    analysis.visualize_collected_data()
 
     # Define the reference data for comparison
     reference_data = [
@@ -52,5 +57,6 @@ def main():
     analysis.compare_with_reference(reference_df)
 
 if __name__ == "__main__":
-    main()
+   main() 
+ 
 

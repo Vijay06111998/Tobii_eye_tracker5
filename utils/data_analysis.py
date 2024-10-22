@@ -44,4 +44,16 @@ class DataAnalysis:
         plt.ylabel('Difference in Gaze Coordinates')
         plt.show()
 
+    def visualize_collected_data(self):
+        """Visualize the collected eye tracking data."""
+        eye_data = self.data[['timestamp', 'gaze_x', 'gaze_y']]
+        plt.figure(figsize=(10, 5))
+        plt.plot(eye_data['timestamp'], eye_data['gaze_x'], label='Gaze X', color='blue')
+        plt.plot(eye_data['timestamp'], eye_data['gaze_y'], label='Gaze Y', color='orange')
+        plt.title('Eye Tracking Data Visualization')
+        plt.xlabel('Timestamp (seconds)')
+        plt.ylabel('Gaze Coordinates')
+        plt.legend()
+        plt.grid()
+        plt.show()
 

@@ -32,6 +32,18 @@ class DataStorage:
         print(f"Data saved to Excel: {excel_file_path}")
 
         return csv_file_path, excel_file_path
+    
+    def load_data(self):
+        """Load the collected data from the CSV file."""
+        try:
+            data = pd.read_csv(self.file_path)
+            return data.to_dict(orient='records')
+        except FileNotFoundError:
+            print(f"File not found: {self.file_path}")
+            return []
+        except Exception as e:
+            print(f"An error occurred while loading data: {e}")
+            return []
 
 
 
