@@ -11,8 +11,8 @@ class EyeTracker:
         if found_eyetrackers:
             self.tracker = found_eyetrackers[0]
             print(f"Using Tobii Eye Tracker: {self.tracker.model}")
-            print(f"Tracker ID: {self.tracker.serial_number}")
-            #print(f"Tracker IP: {self.tracker.ip_address}")
+            print(f"Address: {self.tracker.address}")
+            
             time.sleep(10)
         else:
             raise Exception("No Tobii Eye Tracker found")

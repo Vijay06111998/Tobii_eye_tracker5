@@ -1,9 +1,7 @@
 from utils.eye_tracker import EyeTracker
 from utils.data_storage import DataStorage
 from utils.data_analysis import DataAnalysis
-import pandas as pd
-import threading 
- 
+import pandas as pd 
 
 def main():
     # Create instances of the classes
