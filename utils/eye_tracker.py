@@ -16,7 +16,11 @@ class EyeTracker:
             time.sleep(10)
         else:
             raise Exception("No Tobii Eye Tracker found")
+    print(f" Searching for Tobii Eye Tracker Please wait................ ")
     time.sleep(10)
+    print(f""" Found an Eye_Tracker 
+                     Getting details of it....................""")
+    
 
     def collect_eye_data(self):
         """Collect real-time eye tracking data and return it."""
