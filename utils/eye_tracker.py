@@ -11,6 +11,9 @@ class EyeTracker:
         if found_eyetrackers:
             self.tracker = found_eyetrackers[0]
             print(f"Using Tobii Eye Tracker: {self.tracker.model}")
+            print(f"Tracker ID: {self.tracker.serial_number}")
+            #print(f"Tracker IP: {self.tracker.ip_address}")
+            time.sleep(10)
         else:
             raise Exception("No Tobii Eye Tracker found")
 
@@ -29,8 +32,8 @@ class EyeTracker:
 
         self.tracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_callback, as_dictionary=True)
         
-        print("Collecting eye tracking data for 10 seconds...")
-        time.sleep(10)
+        print("Collecting eye tracking data...")
+        time.sleep(30)
         
         self.tracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_callback)
         print("Data collection complete.")
