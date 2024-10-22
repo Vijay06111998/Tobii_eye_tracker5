@@ -16,6 +16,7 @@ class EyeTracker:
             time.sleep(10)
         else:
             raise Exception("No Tobii Eye Tracker found")
+    time.sleep(10)
 
     def collect_eye_data(self):
         """Collect real-time eye tracking data and return it."""
