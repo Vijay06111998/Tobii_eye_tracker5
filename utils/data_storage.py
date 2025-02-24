@@ -1,51 +1,22 @@
-# import pandas as pd
-
-# class DataStorage:
-#     def __init__(self, file_path='data/collected_eye_data.csv'):
-#         self.file_path = file_path
-
-#     def save_data(self, data, columns):
-#         """Save collected data to a CSV file."""
-#         df = pd.DataFrame(data, columns=columns)
-#         df.to_csv(self.file_path, index=False)
-#         print(f"Data saved to {self.file_path}")
-
-
 import pandas as pd
+import os
 
 class DataStorage:
-    def __init__(self, file_path='data/collected_eye_data.csv'):
-        self.file_path = file_path
+    def __init__(self, excel_file='data/collected_eye_data.xlsx'):
+        self.excel_file = excel_file
 
-    def save_data(self, data, columns):
-        """Save the collected data to both CSV and Excel files."""
-        collected_df = pd.DataFrame(data, columns=columns)
-        
-        # Save as CSV
-        csv_file_path = self.file_path
-        collected_df.to_csv(csv_file_path, index=False)
-        print(f"Data saved to CSV: {csv_file_path}")
+    def save_data(self, collected_data, columns):
+        # Create DataFrame from collected data
+        collected_df = pd.DataFrame(collected_data, columns=columns)
 
-        # Save as Excel
-        excel_file_path = csv_file_path.replace('.csv', '.xlsx')
-        collected_df.to_excel(excel_file_path, index=False)
-        print(f"Data saved to Excel: {excel_file_path}")
+        # Check if the Excel file exists
+        if os.path.exists(self.excel_file):
+            # Append new data to the existing Excel file
+            with pd.ExcelWriter(self.excel_file, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+                collected_df.to_excel(writer, index=False, header=False, startrow=writer.sheets['Sheet1'].max_row, sheet_name='Sheet1')
+        else:
+            # Create a new Excel file and write the DataFrame with headers
+            with pd.ExcelWriter(self.excel_file, engine='openpyxl') as writer:
+                collected_df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
 
-        return csv_file_path, excel_file_path
-    
-    def load_data(self):
-        """Load the collected data from the CSV file."""
-        try:
-            data = pd.read_csv(self.file_path)
-            return data.to_dict(orient='records')
-        except FileNotFoundError:
-            print(f"File not found: {self.file_path}")
-            return []
-        except Exception as e:
-            print(f"An error occurred while loading data: {e}")
-            return []
-
-
-
-
-
+        print(f"Data saved to Excel: {self.excel_file}")

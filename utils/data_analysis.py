@@ -1,59 +1,71 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 class DataAnalysis:
-    def __init__(self, file_path='data/collected_eye_data.csv'):
+    def __init__(self, file_path="data/collected_eye_data.csv"):
+        """Initialize the DataAnalysis class and load the data."""
         self.file_path = file_path
-        self.data = pd.read_csv(self.file_path)
+        self.data = self.load_data()
 
-    def analyze_eye_data(self):
-        """Analyze and plot eye tracking data."""
-        eye_data = self.data[['timestamp', 'gaze_x', 'gaze_y']]
+    def load_data(self):
+        """Load data from CSV file if it exists, otherwise return an empty DataFrame."""
+        if os.path.exists(self.file_path):
+            df = pd.read_csv(self.file_path)
+            if df.empty:
+                print("Warning: The collected data file is empty.")
+            return df
+        else:
+            print(f"File not found: {self.file_path}")
+            return pd.DataFrame()
+
+    def visualize_data(self):
+        """Plot gaze position over time."""
+        if self.data.empty:
+            print("No data available for visualization.")
+            return
+
         plt.figure(figsize=(10, 5))
-        plt.plot(eye_data['timestamp'], eye_data['gaze_x'], label='Gaze X')
-        plt.plot(eye_data['timestamp'], eye_data['gaze_y'], label='Gaze Y')
-        plt.title('Gaze Points Over Time')
-        plt.xlabel('Time (s)')
-        plt.ylabel('Gaze Coordinates')
-        plt.legend()
-        plt.show()
-        
-    def plot_trend(self, x, y, label):
-        """Plot trend line with data points."""
-        slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-        trend_line = slope * x + intercept
+        plt.plot(self.data['timestamp'], self.data['gaze_x'], label='Gaze X', color='blue')
+        plt.plot(self.data['timestamp'], self.data['gaze_y'], label='Gaze Y', color='red')
 
-        plt.figure(figsize=(10, 5))
-        plt.scatter(x, y, label=label, alpha=0.5, color='blue')
-        plt.plot(x, trend_line, color='red', label='Trend Line')
-        plt.title(f'Trend Analysis of {label}')
-        plt.xlabel('Time (s)')
-        plt.ylabel('Gaze Coordinates')
-        plt.legend()
-        plt.grid()
-        plt.show()
-
-        print(f"Slope: {slope}, Intercept: {intercept}, R-squared: {r_value**2}")
-    
-    def compare_with_reference(self, reference_data):
-        """Compare collected eye data with a reference."""
-        reference_df = pd.DataFrame(reference_data, columns=['timestamp', 'gaze_x', 'gaze_y'])
-        comparison = self.data[['gaze_x', 'gaze_y']].subtract(reference_df[['gaze_x', 'gaze_y']], axis=0)
-        comparison.plot(title='Difference between recorded and reference gaze data')
-        plt.xlabel('Sample Index')
-        plt.ylabel('Difference in Gaze Coordinates')
-        plt.show()
-
-    def visualize_collected_data(self):
-        """Visualize the collected eye tracking data."""
-        eye_data = self.data[['timestamp', 'gaze_x', 'gaze_y']]
-        plt.figure(figsize=(10, 5))
-        plt.plot(eye_data['timestamp'], eye_data['gaze_x'], label='Gaze X', color='blue')
-        plt.plot(eye_data['timestamp'], eye_data['gaze_y'], label='Gaze Y', color='orange')
         plt.title('Eye Tracking Data Visualization')
-        plt.xlabel('Timestamp (seconds)')
-        plt.ylabel('Gaze Coordinates')
+        plt.xlabel('Timestamp')
+        plt.ylabel('Gaze Position')
         plt.legend()
         plt.grid()
         plt.show()
 
+    def compare_with_reference(self, reference_df):
+        """Compare collected eye-tracking data with a reference dataset."""
+        if self.data.empty:
+            print("No collected data available for comparison.")
+            return
+        
+        if reference_df.empty:
+            print("Reference dataset is empty. Cannot compare.")
+            return
+        
+        # Ensure both datasets have the same columns
+        common_cols = ['timestamp', 'gaze_x', 'gaze_y']
+        if not all(col in self.data.columns for col in common_cols) or not all(col in reference_df.columns for col in common_cols):
+            print("Reference dataset does not have the required columns for comparison.")
+            return
+
+        # Merge the collected data and reference data on 'timestamp'
+        merged_data = self.data.merge(reference_df, on='timestamp', suffixes=('_collected', '_reference'))
+        
+        # Plot comparison
+        plt.figure(figsize=(10, 5))
+        plt.plot(merged_data['timestamp'], merged_data['gaze_x_collected'], label='Collected Gaze X', color='blue')
+        plt.plot(merged_data['timestamp'], merged_data['gaze_x_reference'], label='Reference Gaze X', linestyle='dashed', color='lightblue')
+        
+        plt.plot(merged_data['timestamp'], merged_data['gaze_y_collected'], label='Collected Gaze Y', color='orange')
+        plt.plot(merged_data['timestamp'], merged_data['gaze_y_reference'], label='Reference Gaze Y', linestyle='dashed', color='lightcoral')
+
+        plt.title('Comparison of Collected vs. Reference Eye Tracking Data')
+        plt.xlabel('Timestamp')
+        plt.ylabel('Gaze Coordinates')
+        plt.legend()
+        plt.grid()
+        plt.show()
